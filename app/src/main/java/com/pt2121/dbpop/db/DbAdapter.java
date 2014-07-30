@@ -39,10 +39,13 @@ public class DbAdapter {
         values.put(DbHelper.COLUMN_NAME, program.name);
         values.put(DbHelper.COLUMN_LATITUDE, program.lat);
         values.put(DbHelper.COLUMN_LONGITUDE, program.lng);
-        values.put(DbHelper.COLUMN_EXTERNAL_ID, program.externalId);
+        if(program.externalId != -1)
+            values.put(DbHelper.COLUMN_EXTERNAL_ID, program.externalId);
         values.put(DbHelper.COLUMN_URL, program.url);
-        values.put(DbHelper.COLUMN_API_REQUEST_FIELD, program.apiKey.first);
-        values.put(DbHelper.COLUMN_API_REQUEST_VALUE, program.apiKey.second);
+        if(program.apiKey != null) {
+            values.put(DbHelper.COLUMN_API_REQUEST_FIELD, program.apiKey.first);
+            values.put(DbHelper.COLUMN_API_REQUEST_VALUE, program.apiKey.second);
+        }
         return mDb.insert(DbHelper.TABLE_NAME, null, values);
     }
 

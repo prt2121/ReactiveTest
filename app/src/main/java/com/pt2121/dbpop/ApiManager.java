@@ -26,6 +26,31 @@ public class ApiManager {
     private final WebService service = restAdapter.create(WebService.class);
 
     public void getAllPrograms(final Context context) {
+        final com.pt2121.dbpop.model.Program bikeChattanooga =
+                new com.pt2121.dbpop.model.Program(0, "Bike Chattanooga",
+                        Double.valueOf(35.0982955).floatValue(), Double.valueOf(-85.238691).floatValue(), -1,
+                        "http://bikechattanooga.com/stations/json", null);
+
+        final com.pt2121.dbpop.model.Program citiBike =
+                new com.pt2121.dbpop.model.Program(0, "Citi Bike",
+                        Double.valueOf(40.7056308).floatValue(), Double.valueOf(-73.9780035).floatValue(), -1,
+                        "http://citibikenyc.com/stations/json", null);
+
+        final com.pt2121.dbpop.model.Program divvy =
+                new com.pt2121.dbpop.model.Program(0, "Divvy",
+                        Double.valueOf(41.8337329).floatValue(), Double.valueOf(-87.7321555).floatValue(), -1,
+                        "http://www.divvybikes.com/stations/json", null);
+
+        final com.pt2121.dbpop.model.Program cogoBikeShare =
+                new com.pt2121.dbpop.model.Program(0, "CoGo Bike Share",
+                        Double.valueOf(39.9829515).floatValue(), Double.valueOf(-82.990829).floatValue(), -1,
+                        "http://cogobikeshare.com/stations/json", null);
+
+        final com.pt2121.dbpop.model.Program bayAreaBikeShare =
+                new com.pt2121.dbpop.model.Program(0, "Bay Area Bike Share",
+                        Double.valueOf(37.7577).floatValue(), Double.valueOf(-122.4376).floatValue(), -1,
+                        "http://bayareabikeshare.com/stations/json", null);
+
         service.listPrograms()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -36,6 +61,12 @@ public class ApiManager {
                         final DbAdapter dbAdapter = new DbAdapter(context);
                         dbAdapter.open();
                         Log.v(TAG, "opened");
+                        dbAdapter.insert(citiBike);
+                        dbAdapter.insert(bayAreaBikeShare);
+                        dbAdapter.insert(divvy);
+                        dbAdapter.insert(bikeChattanooga);
+                        dbAdapter.insert(cogoBikeShare);
+
                         for (Program p : programs) {
                             dbAdapter.insert(
                                     new com.pt2121.dbpop.model.Program(0,
@@ -44,7 +75,7 @@ public class ApiManager {
                                             p.getMapCenter().getLongitude().floatValue(),
                                             p.getProgramId(),
                                             "https://publicapi.bcycle.com/api/1.0/ListProgramKiosks/" + p.getProgramId(),
-                                            new Pair<String, String>("ApiKey", "")) // TODO add key
+                                            new Pair<String, String>("", ""))
                             );
                         }
                         dbAdapter.close();
